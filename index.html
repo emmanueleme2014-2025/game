@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Code Clash: Typing Battle</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f1117;
+      color: #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    h1 {
+      color: #00e5ff;
+      margin-bottom: 0.5rem;
+    }
+    #word {
+      font-size: 2rem;
+      margin: 1rem 0;
+      letter-spacing: 2px;
+    }
+    input {
+      padding: 0.5rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+      width: 300px;
+      text-align: center;
+    }
+    #status {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    #score {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      color: #90caf9;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background: #00e5ff;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #00bcd4;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚔️ Code Clash</h1>
+  <div id="word">loading...</div>
+  <input type="text" id="input" placeholder="Type the word..." autocomplete="off" />
+  <div id="status"></div>
+  <div id="score">Score: 0</div>
+  <button onclick="startGame()">Restart</button>
+
+  <script>
+    const words = [
+      "function", "variable", "console", "object", "array", "return", "string",
+      "boolean", "number", "class", "async", "await", "export", "import",
+      "switch", "case", "break", "default", "const", "let"
+    ];
+    let currentWord = "";
+    let score = 0;
+
+    const wordEl = document.getElementById("word");
+    const inputEl = document.getElementById("input");
+    const statusEl = document.getElementById("status");
+    const scoreEl = document.getElementById("score");
+
+    function pickWord() {
+      currentWord = words[Math.floor(Math.random() * words.length)];
+      wordEl.textContent = currentWord;
+      inputEl.value = "";
+      inputEl.focus();
+    }
+
+    inputEl.addEventListener("input", () => {
+      if (inputEl.value === currentWord) {
+        score++;
+        scoreEl.textContent = "Score: " + score;
+        statusEl.textContent = "✅ Correct!";
+        pickWord();
+      } else {
+        statusEl.textContent = "";
+      }
+    });
+
+    function startGame() {
+      score = 0;
+      scoreEl.textContent = "Score: 0";
+      statusEl.textContent = "";
+      pickWord();
+    }
+
+    window.onload = startGame;
+  </script>
+</body>
+</html>
