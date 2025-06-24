@@ -14,16 +14,10 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
+      text-align: center;
     }
-    h1 {
-      color: #00e5ff;
-      margin-bottom: 0.5rem;
-    }
-    #word {
-      font-size: 2rem;
-      margin: 1rem 0;
-      letter-spacing: 2px;
-    }
+    h1 { color: #00e5ff; margin-bottom: 0.5rem; }
+    #word { font-size: 2rem; margin: 1rem 0; letter-spacing: 2px; }
     input {
       padding: 0.5rem;
       font-size: 1.2rem;
@@ -31,13 +25,9 @@
       border-radius: 5px;
       outline: none;
       width: 300px;
-      text-align: center;
     }
-    #status {
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-    #score {
+    #status { margin-top: 1rem; font-weight: bold; }
+    #score, #timer {
       margin-top: 0.5rem;
       font-size: 1rem;
       color: #90caf9;
@@ -52,18 +42,17 @@
       border-radius: 5px;
       cursor: pointer;
     }
-    button:hover {
-      background: #00bcd4;
-    }
+    button:hover { background: #00bcd4; }
   </style>
 </head>
 <body>
   <h1>⚔️ Code Clash</h1>
+  <div id="timer">⏱️ Time Left: 30</div>
   <div id="word">loading...</div>
-  <input type="text" id="input" placeholder="Type the word..." autocomplete="off" />
+  <input type="text" id="input" placeholder="Type the word..." autocomplete="off" disabled />
   <div id="status"></div>
   <div id="score">Score: 0</div>
-  <button onclick="startGame()">Restart</button>
+  <button onclick="startGame()">Start Game</button>
 
   <script>
     const words = [
@@ -71,13 +60,17 @@
       "boolean", "number", "class", "async", "await", "export", "import",
       "switch", "case", "break", "default", "const", "let"
     ];
+
     let currentWord = "";
     let score = 0;
+    let timeLeft = 30;
+    let timerInterval;
 
     const wordEl = document.getElementById("word");
     const inputEl = document.getElementById("input");
     const statusEl = document.getElementById("status");
     const scoreEl = document.getElementById("score");
+    const timerEl = document.getElementById("timer");
 
     function pickWord() {
       currentWord = words[Math.floor(Math.random() * words.length)];
@@ -99,12 +92,33 @@
 
     function startGame() {
       score = 0;
+      timeLeft = 30;
       scoreEl.textContent = "Score: 0";
       statusEl.textContent = "";
+      inputEl.disabled = false;
       pickWord();
+      updateTimer();
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if (timeLeft <= 0) endGame();
+      }, 1000);
     }
 
-    window.onload = startGame;
+    function updateTimer() {
+      timerEl.textContent = `⏱️ Time Left: ${timeLeft}`;
+    }
+
+    function endGame() {
+      clearInterval(timerInterval);
+      statusEl.textContent = `⏹️ Time's up! Final Score: ${score}`;
+      inputEl.disabled = true;
+      wordEl.textContent = "Game Over";
+    }
+
+    // Optional: start automatically on page load
+    // window.onload = startGame;
   </script>
 </body>
 </html>
